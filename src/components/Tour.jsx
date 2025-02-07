@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 
 function Tour(props) {
-  const { id, image, info, name, price } = props;
+  const { id, image, info, name, price, handleDelete } = props;
   const [isClicked, setIsClicked] = useState(false);
 
   const handleReadMore = () => {
     setIsClicked(!isClicked);
   };
+
   return (
     <div className="single-tour">
       <img className="img" src={image} alt={id} />
@@ -21,7 +22,11 @@ function Tour(props) {
         </p>
 
         <p className="tour-price">${price}</p>
-        <button className="btn delete-btn btn-block" type="button">
+        <button
+          onClick={() => handleDelete()}
+          className="btn delete-btn btn-block"
+          type="button"
+        >
           Delete
         </button>
       </div>

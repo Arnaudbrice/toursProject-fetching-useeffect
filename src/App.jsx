@@ -12,25 +12,36 @@ const App = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   const [isError, setIsError] = useState(false);
+  const fetchTours = async () => {
+    try {
+      const response = await axios.get(url);
+      console.log(response.data);
+
+      const data = await response.data;
+      console.log(data);
+
+      setTours(data);
+      setIsLoading(false);
+      setIsError(false);
+    } catch (error) {
+      setIsLoading(false);
+      setIsError(true);
+    }
+  };
+
   useEffect(() => {
-    const fetchTours = async () => {
-      try {
-        const response = await axios.get(url);
-        console.log(response.data);
-
-        const data = await response.data;
-        console.log(data);
-
-        setTours(data);
-        setIsLoading(false);
-        setIsError(false);
-      } catch (error) {
-        setIsLoading(false);
-        setIsError(true);
-      }
-    };
     fetchTours();
   }, []);
+
+  const handleDeleteClick = id => {
+    console.log(id);
+    setTours(tours.filter(tour => tour.id !== id));
+  };
+
+  const handleReFetch = () => {
+    setIsLoading(true);
+    fetchTours();
+  };
 
   if (isLoading) {
     return <Loading />;
@@ -44,7 +55,15 @@ const App = () => {
     <div className="main">
       <h1 className="title ">Our Tours</h1>
       <hr className="title-underline" />
-      <Tours tours={tours} />;
+      <button
+        style={{ marginTop: "2rem", color: "#ffffff" }}
+        type="button"
+        className="btn btn-block"
+        onClick={handleReFetch}
+      >
+        Re-fetch
+      </button>
+      <Tours tours={tours} deleteHandler={handleDeleteClick} />;
     </div>
   );
 };
